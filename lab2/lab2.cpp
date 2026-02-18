@@ -34,26 +34,30 @@ int main()
      */
 
     {
-        int y, bit, i = 31;
+        int y1, y2, bit1, bit2, i = 31;
         bool flag = 0;
         cout << "Enter number: ";
-        cin >> y;
+        cin >> y1, y2;
         if (y == 0)
         {
             cout << 0;
         }
         else
         {
+            for (int k; k < 0; k--){
+                bit1 = (k >> i) & 1;
+                cout << bit1 << endl;
+            }
             while (i != -1)
             {
-                bit = (y >> i) & 1;
-                if (bit)
+                bit2 = (y >> i) & 1;
+                if (bit2)
                 {
                     flag = 1;
-                }
+                }   
                 if (flag)
                 {
-                    cout << bit << " ";
+                    cout << bit2 << " ";
                 }
                 i--;
             }
@@ -388,7 +392,6 @@ int main()
      * до любых функций (хотя правила компиляции не запрещают подключить их
      * тут).
      */
-
     /**
      * Задание 4. Указатели. 
      */
@@ -406,7 +409,12 @@ int main()
      */
 
     {
-
+        int a = 10;
+        float b = 12.1;
+        int *pa = &a;
+        float *pb = &b;
+        cout << pa << "  " << *pa << endl;
+        cout << pb << "  " << *pb << endl;
     }
 
     /**
@@ -421,7 +429,11 @@ int main()
      */
 
     {
-
+        const char* ptr = "abc";
+        char element_two = ptr[1], element_one = ptr[0], element_three = ptr[2];
+        cout << element_one << endl;
+        cout << element_two << endl;
+        cout << element_three << endl;
     }
 
     /**
@@ -434,26 +446,28 @@ int main()
      * Интерпретируте наблюдаемые результаты.
      */
     {
-        int nAr[3] = {1,3};
-        int* pn = &nAr[0];
-        (*pn)++;    
-        pn++;   
+        int nAr[3] = {1,3}; 
+        int* pn = &nAr[0]; // 1
+        (*pn)++;    // 2
+        pn++;   // 3
 
         char cAr[] = {'A', 'B', 'C', 'D'};
-        char *pc = &cAr[0];
-        (*pc) = (*pc) + 5;  
-        pc = pc + 3;    
+        char *pc = &cAr[0]; // *pc = 65 'A'
+        (*pc) = (*pc) + 5;  // *pc = 70 'F'
+        pc = pc + 3;    // *pc = 68 'D'
     
         double dAr[3]={1.0,2.0};
-        double *pd1 = &dAr[0];
-        double *pd2 = pd1;
-        (*pd2) += 2;
-        pd2 += 2;
+        double *pd1 = &dAr[0]; // 1.0
+        double *pd2 = pd1; // 1.0
+        (*pd2) += 2; // 3.0
+        pd2 += 2; // 0.0
 
         /** Объясните результат выполнения операции вычитания двух указателей */
-        pd1 = &dAr[0];
-        pd2 = &dAr[1];
-        int nNumber = pd2 - pd1;
+        pd1 = &dAr[0]; // 0.0
+        pd2 = &dAr[1]; // 3.0
+        int nNumber = pd2 - pd1; // 1
+
+        cout << "pd2 > pd1 - " << (pd2 > pd1) << endl;
 
         /** 
          * Сравните указатели pd2 и pd1 и с помощью cout выведите результаты
@@ -481,38 +495,34 @@ int main()
         unsigned int nObject = 0x55667788;
         unsigned int* pnObject = &nObject;
         unsigned char* pucObject;
-        char cc;
+        unsigned char cc;
 
-        /**
-         * Раскомментировав следующую строчку кода, обратите внимание на
-         * сообщение компилятора - он не считает преобразование "легальным"
-         * (безопасным)
-         */
-        // pucObject = static_cast<unsigned char*>(pnObject);
-
-        /**
-         * А такое преобразование - целиком на совести программиста. Его можно
-         * применять, только четко представляя себе результат преобразования.
-         */
+        // Интерпретируем те же 4 байта как массив байтов
         pucObject = reinterpret_cast<unsigned char*>(pnObject);
 
-        /** Проследите за значениями переменной `cc`. Объясните результаты. */
-        cc = pucObject[0];
-        cc = pucObject[1];
-        cc = pucObject[2];
-        cc = pucObject[3];
+        cout << hex << showbase;
 
-        /**
-         * Выполните следующие строки, наблюдая за значениями следующих
-         * выражений: `cc`, `p` и `*p`.
-         *
-         * Зафиксируйте и интерпретируйте результаты.
-         */
-        cc = *(pucObject++);
-        cc = (*pucObject)++;
+        // Просмотр байтов числа в памяти
+        for (int i = 0; i < 4; ++i)
+        {
+            cc = pucObject[i];
+            cout << "byte[" << i << "] = "
+                    << static_cast<int>(cc) << "\n";
+        }
 
-        cc = ++*(pucObject);
-        cc = *(++pucObject);
+        cout << "\nОперации:\n";
+
+        cc = *(pucObject++);      // читаем байт, затем двигаем указатель
+        cout << "1) " << static_cast<int>(cc) << "\n";
+
+        cc = (*pucObject)++;      // читаем, затем увеличиваем байт в памяти
+        cout << "2) " << static_cast<int>(cc) << "\n";
+
+        cc = ++(*pucObject);      // увеличиваем байт, затем читаем
+        cout << "3) " << static_cast<int>(cc) << "\n";
+
+        cc = *(++pucObject);      // двигаем указатель, затем читаем
+        cout << "4) " << static_cast<int>(cc) << "\n";
     }
 
     /**
@@ -541,7 +551,8 @@ int main()
          * Прежде, чем раскомментировать следующую строчку, вспомните: что
          * нужно сделать, чтобы выражение стало корректным?
          */
-        // pInt=pVoid;
+        
+        pInt = static_cast<int*>(pVoid);
 
     }
     
@@ -553,7 +564,7 @@ int main()
      */
     {
         const int n = 1;
-        //... = &n;
+        void* pn = &n;
     }
 
     /**
@@ -566,7 +577,7 @@ int main()
 
     {
         double dObject3 = 33.33;
-        // ... pVoid = &dObject3;  //(1)
+        // ... pVoid = &dObject3;  //не соответствие типов
 
         // int nTmp = *(static_cast<int*>(pVoid) ); //(2) 
     }
@@ -619,7 +630,8 @@ int main()
      */
 
     {
-        // const int nN = 1;
+        const int nN = 10;
+        const int *pnN = &nN;
     }
 
     /**
@@ -633,23 +645,24 @@ int main()
          * Объявите указатель pn и проинициализируйте его так, чтобы он
          * "указывал" на n. 
          */
+        int *pn = &n;
 
         /** 
          * Объявите указатель ppn и проинициализируйте его так, чтобы он
          * "указывал" на pn. 
-         */
-
+        */
+        int **ppn = &pn;
         /** 
          * Объявите указатель pppn и проинициализируйте его так, чтобы он
          * "указывал" на ppn. 
          */
-
+        int ***pppn = &ppn;
         /** 
          * С помощью указателей pn, ppn и pppn получите значение объекта n и
          * присвойте его m.
          */
 
-        // int m = ...;
+        int m = *(**pppn)
     }
     return 0;
 }

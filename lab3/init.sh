@@ -1,0 +1,1 @@
+g++ draft.cpp -o program && ./program

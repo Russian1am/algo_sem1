@@ -4,5 +4,7 @@ using namespace std;
 
 int main()
 {
-    cout << "Goodbye" << endl;
+    const int nN = 10;
+    const int *pnN = &nN;
+    cout << *pnN << endl;
 }

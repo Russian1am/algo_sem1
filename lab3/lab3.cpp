@@ -26,7 +26,13 @@ int main()
      *            | 1  1  1 | /
      *            |_________|
      */
-
+    {
+        int a[3][3][3] = {
+            {{1,1,1}, {1,1,1}, {1,1,1}},
+            {{2,2,2}, {2,2,2}, {2,2,2}},
+            {{3,3,3}, {3,3,3}, {3,3,3}},
+        };
+    }
     /**
      * Задание 1.2.
      *
@@ -34,14 +40,53 @@ int main()
      * помощью кода так, чтобы в итоге получился такой же массив, как в задании
      * 1.1.
      */
-
+    int a[3][3][3] = {{{},{},{}}, {{},{},{}}, {{},{},{}}};
+    int user_input;
+    for (int i = 0;i < 3; i++){
+        cout << "\nLayer number " << i + 1 << endl;
+        for (int k = 0; k < 3; k++){
+            for (int j = 0; j < 3; j++){
+                cout << "Enter number: ";
+                cin >> a[i][k][j];
+            }
+        }
+    }
+    cout << "Your inputs: " << endl;
+    for (int i = 0;i < 3; i++){
+        cout << endl;
+        for (int k = 0; k < 3; k++){
+            cout << endl;
+            for (int j = 0; j < 3; j++){
+                cout << a[i][k][j] << " ";
+            }
+        }
+    }
+    cout << endl;
     /**
      * Задание 1.3.
      *
      * Напишите код, с помощью которого можно найти сумму элементов массива,
      * полученного в задании 1.
      */
-
+    int arr[3][3][3] = {{{},{},{}}, {{},{},{}}, {{},{},{}}};
+    int user_input = 0, sum_of_digits = 0;
+    for (int i = 0;i < 3; i++){
+        cout << "\nLayer number " << i + 1 << endl;
+        for (int k = 0; k < 3; k++){
+            for (int j = 0; j < 3; j++){
+                cout << "Enter number: ";
+                cin >> arr[i][k][j];
+            }
+        }
+    }
+    for (int i = 0;i < 3; i++){
+        for (int k = 0; k < 3; k++){
+            for (int j = 0; j < 3; j++){
+                sum_of_digits += arr[i][k][j];
+            }
+        }
+    }
+    cout << "The sum is: " << sum_of_digits << endl;
     /**
      * Задание 1.4.
      *
