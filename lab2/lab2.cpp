@@ -564,7 +564,7 @@ int main()
      */
     {
         const int n = 1;
-        void* pn = &n;
+        const void* pn = &n;
     }
 
     /**
@@ -577,9 +577,9 @@ int main()
 
     {
         double dObject3 = 33.33;
-        // ... pVoid = &dObject3;  //не соответствие типов
+        void* pVoid = &dObject3;
 
-        // int nTmp = *(static_cast<int*>(pVoid) ); //(2) 
+        int nTmp = *(static_cast<int*>(pVoid));
     }
 
     /**
@@ -603,7 +603,15 @@ int main()
      */
 
     {
+        int la = 10, lb = 90;
 
+        int* const pla = &la; 
+
+        cout << *pla << endl; // значение
+
+        *pla += 12;
+
+        cout << *pla << endl;
     }
     
     /**
@@ -611,7 +619,15 @@ int main()
      */
 
     {
+        int la = 10, lb = 90;
 
+        const int* pla = &la; 
+
+        cout << *pla << endl; // значение
+
+        pla = &lb;
+
+        cout << *pla << endl;
     }
 
     /**
@@ -619,7 +635,13 @@ int main()
      */
 
     {
+        const int la = 10;
 
+        int lb = 90;
+
+        const int* pla = &la; 
+
+        cout << *pla << endl;
     }
 
     /**
