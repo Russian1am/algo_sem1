@@ -3,8 +3,9 @@
  * параметров. Возвращение значения.
  */
 #include <iostream>
-#include <cstdio>
-#include <cstdarg>
+#include <ctime>
+//#include <cstdio>
+//#include <cstdarg>
 
 #include "other.h"
 
@@ -18,20 +19,23 @@ int main()
      */
 
     {
-        double a = 10.1;
-        double& link_a = a;
-        link_a = 12.12;
+        // TODO: что такое ссылка в С++?
+        double value = 1.5;
+        double &ref = value;
+        ref = 2.5;
+        std::cout << value << "\n";
     }
 
     /**
      * Раскомментируйте следующую строку. 
      *
      * Объясните, почему возникает ошибка? Что следует сделать, чтобы
-     * компилятор не выдавал ошибку
-    **/
+     * компилятор не выдавал ошибки?
+     */
     {
-        int a = 1;
-        int& ref = a;
+        // int &ref = 1;
+        const int &ref = 1;
+        std::cout << ref << "\n";
     }
 
     /**
@@ -43,12 +47,14 @@ int main()
      */
 
     {
-        char c = 'a';
+        char c='A';
         char* pc = &c;
-        char& ref_pc = pc;
-        *ref = 'd';
-        char b = 'g';
-        ref = &b;
+        char *&ref = pc;
+        *ref = 'B';
+        std::cout << c << std::endl;
+        char other = 'C';
+        ref = &other;
+        std::cout << *pc << std::endl;
     }
 
     /**
@@ -68,6 +74,7 @@ int main()
      * Поместите объявления этих функций в заголовочный файл `other.h`, а их
      * определение в `other.cpp`.
      */
+
     //Замечание: объявления функций принято помещать в заголовочный файл
     {
         /** 
@@ -75,6 +82,12 @@ int main()
          * функций на единицу.
          */
         int val =1;
+        val = inc_by_value(val);
+        std::cout << val << "\n";
+        inc_by_pointer(&val);
+        std::cout << val << "\n";
+        inc_by_reference(val);
+        std::cout << val << "\n";
 
     }
 
@@ -97,8 +110,12 @@ int main()
         int nY = -1;
         /** поменяли местами значения nX и nY с помощью указателей на nX и nY */
         // swap(...  ,  ...);
+        swap(&nX, &nY);
+        std::cout << nX << " " << nY << "\n";
         /** а теперь обратно с помощью ссылок на nX и nY */
         // swap(...  ,  ...);
+        swap(nX, nY);
+        std::cout << nX << " " << nY << "\n";
     }
 
     /**
@@ -120,11 +137,23 @@ int main()
      */
     {
         /** Задайте массивы для проверки и проверьте результат работы функции */
+        int a[4] = {8, -1, 9, 1};
+        std::cout << min_array(a, 4) << "\n";
+        int **b = new int*[2];
+        b[0] = new int[3]{4, 2, 8};
+        b[1] = new int[3]{7, -3, 1};
+        std::cout << min_array(b, 2, 3) << "\n";
+        delete[] b[0];
+        delete[] b[1];
+        delete[] b;
 
         /** 
          * Покажите, как можно использовать эту функцию для встроенных
          * двумерных массивов.
          */
+        int c[2][3] = {{6, 2, 4}, {1, -5, 3}};
+        const int *rows[2] = {c[0], c[1]};
+        std::cout << min_array(rows, 2, 3) << "\n";
     }
 
     /**
@@ -143,10 +172,14 @@ int main()
 
     {
         /** Создайте две строки для сравнения */
+        const char a[] = "abc";
+        const char b[] = "abd";
 
         /** Вызовите функцию сравнения */
-        
+        int result = my_str_cmp(a, b);
+
         /** Выведите результат сравнения с помощью cout */
+        std::cout << result << "\n";
     }
 
     /**
@@ -187,6 +220,13 @@ int main()
      * Соберите вашу программу для релиза (с директивой NDEBUG) и выполните код
      * с некорректными значениям. Объясните полученные результаты.
      */
+    {
+#ifdef CHECK_INVALID_SIZE
+        int a[1] = {7};
+        std::cout << min_array(a, 0) << "\n";
+#endif
+    }
+
     
     /**
      * Задание 4. Ссылки в качестве параметров. Передача указателя на
@@ -220,8 +260,13 @@ int main()
             {31,29,31,30,31,30,31,31,30,31,30,31}};  //високосный год
 
         /** Вызов функции DayOfYear */
+        int number = day_of_year(1, 3, 2024, nDayTab);
+        std::cout << number << "\n";
 
         /** Проверка результата обратной функцией DayOfMonth */
+        int day, month;
+        day_of_month(2024, number, day, month, nDayTab);
+        std::cout << day << " " << month << "\n";
 
     }
 
@@ -240,29 +285,25 @@ int main()
      */
 
     {
-        int n; // сформируйте значение n
-        int *arr; // создайте тут массив размера n
+        size_t n = 5;
+        size_t amount_of_digits = 0;
+        int *arr = new int[n];
+        srand(static_cast<unsigned int>(time(0)));
         
         /** заполнение случайными значениями */
         for (int i = 0; i < n; ++i) {
-            // arr[i] = ...;
+            arr[i] = rand() % 20;
         }
 
+        int new_value;
         for (int i = 0; i < 100; ++i) {
-            int new_value;
-            // new_value = ...; // случайное значение
-            new_value = new_value % 10;
-            /** вызов функции добавления в массив */
-            // add_unique(arr, ..., new_value);  
+            new_value = rand() % 10; 
+            add_unique(arr, n, new_value, amount_of_digits);  
         }
         
         /** печать массива на экран */
-        // print_array(arr, ...)
-
-        /**
-         * Тут должно быть не более 10 + n элементов, так как во втором цикле
-         * могут быть получены только 10 разных вариантов.
-         */
+        print_array1(arr, n, amount_of_digits);
+        delete[] arr;
     }
 
     /**
@@ -271,6 +312,9 @@ int main()
      * Напишите рекурсивную функцию вычисления суммы первых N натуральных
      * чисел.
      */
+    {
+        std::cout << natural_sum(10) << "\n";
+    }
 
     /**
      * Задание 7. Кодирование-декодирование информации. Обработка ошибок.
@@ -319,6 +363,31 @@ int main()
      * после чего декодируйте их. Декодированные строки должны совпадать с
      * изначальными.
      */
+    {
+        const char *strings[5] = {"", "A", "AB", "Hello", "ABCDEF"};
+        for (int i = 0; i < 5; ++i) {
+            int n = 0;
+            while (strings[i][n] != '\0'){
+                ++n;
+            }
+            int size = encoded32_size(n);
+            char *encoded = new char[size + 1];
+            char *decoded = new char[n + 1];
+            int a = encode32(strings[i], n, encoded);
+            int b = decode32(encoded, size, decoded);
+            encoded[size] = '\0';
+            decoded[n] = '\0';
+            std::cout << encoded << " " << a << " " << b << " " << (my_str_cmp(strings[i], decoded) == 0) << "\n";
+            delete[] encoded;
+            delete[] decoded;
+        }
+        char raw[2] = {0x1E, 0x47};
+        char encoded[5];
+        encode32(raw, 2, encoded);
+        encoded[4] = '\0';
+        std::cout << encoded << "\n";
+    }
+
 
     /**
      * Задание 8. Функции и макросы с переменным числом параметров.
@@ -337,8 +406,11 @@ int main()
     {
         int nN1=5, nN2=11, nN3=4, nN4=7, nN5=-1;
         // var_args(nN1, 0); 
+        var_args(nN1, 0); 
         // var_args(nN1, nN2, 0); 
+        var_args(nN1, nN2, 0); 
         // var_args(nN1, nN2, nN3, nN4, nN5, 0); 
+        var_args(nN1, nN2, nN3, nN4, nN5, 0); 
     }
 
     /**
@@ -352,8 +424,11 @@ int main()
     {
         int nN1=5, nN2=11, nN3=4, nN4=7, nN5=-1;
         // VAR_ARGS(nN1); 
+        VAR_ARGS(nN1); 
         // VAR_ARGS(nN1, nN2); 
+        VAR_ARGS(nN1, nN2); 
         // VAR_ARGS(nN1, nN2, nN3, nN4, nN5); 
+        VAR_ARGS(nN1, nN2, nN3, nN4, nN5); 
     }
 
     /**
@@ -365,6 +440,12 @@ int main()
      *
      * `*my_min(параметры) = 0;`
      */
+
+    {
+        int a[4] = {5, -2, 8, 1};
+        *my_min(a, 4) = 0;
+        print_array(a, 4);
+    }
 
     return 0;
 }

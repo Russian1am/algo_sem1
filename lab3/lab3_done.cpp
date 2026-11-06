@@ -3,10 +3,15 @@
  * Простейшие алгоритмы сортировки и поиска. Сложные указатели.
  */
 
-int rand_gen(){
-    return (rand() % 10);
-}
+#include <iostream>
+#include <ctime>
+#include <cmath>
 
+using namespace std;
+
+int rand(){
+    return rand();
+}
 
 int main()
 {
@@ -31,13 +36,16 @@ int main()
      *            | 1  1  1 | /
      *            |_________|
      */
+
     {
-        int a[3][3][3] = {
-            {{1,1,1}, {1,1,1}, {1,1,1}},
-            {{2,2,2}, {2,2,2}, {2,2,2}},
-            {{3,3,3}, {3,3,3}, {3,3,3}},
+        const int N = 3, M = 3, K = 3;
+        int array[N][M][K] = {
+            {{1, 1, 1}, {1, 1, 1}, {1, 1, 1}},
+            {{2, 2, 2}, {2, 2, 2}, {2, 2, 2}},
+            {{3, 3, 3}, {3, 3, 3}, {3, 3, 3}}
         };
     }
+
     /**
      * Задание 1.2.
      *
@@ -45,57 +53,44 @@ int main()
      * помощью кода так, чтобы в итоге получился такой же массив, как в задании
      * 1.1.
      */
+
     {
-        int a[3][3][3] = {{{},{},{}}, {{},{},{}}, {{},{},{}}};
-        int user_input;
-        for (int i = 0;i < 3; i++){
-            cout << "\nLayer number " << i + 1 << endl;
-            for (int k = 0; k < 3; k++){
-                for (int j = 0; j < 3; j++){
-                    cout << "Enter number: ";
-                    cin >> a[i][k][j];
+        const int N = 3, M = 3, K = 3;
+        int array[N][M][K];
+        for (int i = 0; i < N; i++) {
+            for (int j = 0; j < M; j++) {
+                for (int k = 0; k < K; k++) {
+                    array[i][j][k] = i + 1;
                 }
             }
         }
-        cout << "Your inputs: " << endl;
-        for (int i = 0;i < 3; i++){
-            cout << endl;
-            for (int k = 0; k < 3; k++){
-                cout << endl;
-                for (int j = 0; j < 3; j++){
-                    cout << a[i][k][j] << " ";
-                }
-            }
-        }
-        cout << endl;
     }
+
     /**
      * Задание 1.3.
      *
      * Напишите код, с помощью которого можно найти сумму элементов массива,
      * полученного в задании 1.
      */
+
     {
-        int arr[3][3][3] = {{{},{},{}}, {{},{},{}}, {{},{},{}}};
-        int user_input = 0, sum_of_digits = 0;
-        for (int i = 0;i < 3; i++){
-            cout << "\nLayer number " << i + 1 << endl;
-            for (int k = 0; k < 3; k++){
-                for (int j = 0; j < 3; j++){
-                    cout << "Enter number: ";
-                    cin >> arr[i][k][j];
+        const int N = 3, M = 3, K = 3;
+        int array[N][M][K] = {
+            {{1, 1, 1}, {1, 1, 1}, {1, 1, 1}},
+            {{2, 2, 2}, {2, 2, 2}, {2, 2, 2}},
+            {{3, 3, 3}, {3, 3, 3}, {3, 3, 3}}
+        };
+        int sum = 0;
+        for (int i = 0; i < N; i++) {
+            for (int j = 0; j < M; j++) {
+                for (int k = 0; k < K; k++) {
+                    sum += array[i][j][k];
                 }
             }
         }
-        for (int i = 0;i < 3; i++){
-            for (int k = 0; k < 3; k++){
-                for (int j = 0; j < 3; j++){
-                    sum_of_digits += arr[i][k][j];
-                }
-            }
-        }
-        cout << "The sum is: " << sum_of_digits << endl;
+        cout << "Сумма трехмерного массива: " << sum << '\n';
     }
+
     /**
      * Задание 1.4.
      *
@@ -116,11 +111,7 @@ int main()
      */
 
     {
-        int masik_pasik[3][3][3] ={
-            {{1}},
-            {{2}},
-            {{3}}
-        };
+        int array[3][3][3] = {{{1}}, {{2}}, {{3}}};
     }
 
     /**
@@ -130,17 +121,17 @@ int main()
      * двухмерный массив и массив указателей. Поясните разницу в использовании
      * элементов таких массивов.
      */
+
     {
-        char masik[3][10] = {"abc", "defg", "hijk"};
-        cout << sizeof(masik) << endl;
-
-
-        const char* pasik[3] = {"lmnop", "qrs", "tuv"};
-        cout << sizeof(pasik) << endl;
+        char strings[3][6] = {"one", "two", "three"};
+        const char* pointers[3] = {"one", "two", "three"};
     }
+
     /**
      * Задание 2. Динамическое выделение памяти.
      */
+
+    {
 
     /**
      * Задание 2.1.
@@ -171,12 +162,44 @@ int main()
      * Функция time() задает эту точку отсчета, считывая текущее время.
      */
 
+        {
+            srand(time(0));
+            int N = rand() % 4 + 2;
+            int M = rand() % 4 + 2;
+            array = new int*[N];
+            int sum = 0;
+            for (int i = 0; i < N; i++) {
+                array[i] = new int[M];
+                for (int j = 0; j < M; j++) {
+                    array[i][j] = rand() % 100;
+                    sum += array[i][j];
+                }
+            }
+            cout << "Сумма динамического массива: " << sum << '\n';
+        }
+
     /**
      * Задание 2.2.
      *
      * В сформированном массиве отсортируйте каждую строку по убыванию
      * значений. Используйте сортировку "выбором".
      */
+
+        {
+            for (int i = 0; i < N; i++) {
+                for (int j = 0; j < M - 1; j++) {
+                    int maxIndex = j;
+                    for (int k = j + 1; k < M; k++) {
+                        if (array[i][k] > array[i][maxIndex]) {
+                            maxIndex = k;
+                        }
+                    }
+                    int temp = array[i][j];
+                    array[i][j] = array[i][maxIndex];
+                    array[i][maxIndex] = temp;
+                }
+            }
+        }
 
     /**
      * Задание 2.3.
@@ -186,6 +209,17 @@ int main()
      * Сформируйте значение i-ого элемента одномерного массива  равным среднему
      * значению элементов i-ой строки двухмерного массива.
      */
+
+        {
+            averages = new double[N];
+            for (int i = 0; i < N; i++) {
+                int sum = 0;
+                for (int j = 0; j < M; j++) {
+                    sum += array[i][j];
+                }
+                averages[i] = (double)sum / M;
+            }
+        }
 
     /**
      * Задание 2.4. 
@@ -200,6 +234,15 @@ int main()
      * Если после выполнении программы выдаются сообщения об утечках, это
      * означает, что где-то не удалена выделенная память.
      */
+
+        {
+            for (int i = 0; i < N; i++) {
+                delete[] array[i];
+            }
+            delete[] array;
+            delete[] averages;
+        }
+    }
 
     /**
      * Задание 3.
@@ -219,15 +262,84 @@ int main()
      * k*N^2, где k - некоторое число.
      */
 
-    /**
-     * Задание 3.2. Простой поиск.
-     *
-     * Модифицируйте предыдущее задание следующим образом:очередное значение
-     * вводится в массив только при условии, что там еще такого нет (то есть
-     * дубли игнорируются).
-     */
+    {
+        const int N = 5;
+        int array[N];
+        for (int i = 0; i < N; i++){
+            int value;
+            cout << "Enter value: ";
+            cin >> value;
 
-     
+            int position = i;
+            while (position > 0 && array[position - 1] > value){
+                array[position] = array[position - 1];
+                --position;
+            }
+            array[position] = value;
+        }
+    }
+
+        /**
+        * Задание 3.2. Простой поиск.
+        *
+        * Модифицируйте предыдущее задание следующим образом:очередное значение
+        * вводится в массив только при условии, что там еще такого нет (то есть
+        * дубли игнорируются).
+        */
+
+        {
+            const int N = 5;
+            int array[N];
+            int count = 0;
+            int right, left, middle;
+            bool exists;
+
+            for (int i = 0; i < N; i++){
+                int value;
+
+                cout << "Enter value: ";
+                cin >> value;
+
+                exists = false;
+                left = 0;
+                right = count - 1;
+
+                while (left <= right){
+                    middle = (left + right) / 2;
+
+                    if (array[middle] == value){
+                        exists = true;
+                        break;
+                    }
+
+                    if (array[middle] < value){
+                        left = middle + 1;
+                    }
+                    else{
+                        right = middle - 1;
+                    }
+                }
+
+                if (!exists){
+                    int j = count - 1;
+                    while (j >= 0 && array[j] > value){
+                        array[j + 1] = array[j];
+                        j--;
+                    }
+                    array[j + 1] = value;
+                    count++;
+                }
+            }
+
+            
+            for (int i = 0; i < count; i++){
+                cout << array[i] << " | ";
+            }
+            cout << endl;
+            // TODO: использовать бинарный поиск
+            // TODO: поможет ли это общей асимптотике?
+        }
+
     /**
      * Задание 4. Сортировка строк.
      *
@@ -254,16 +366,23 @@ int main()
         // M  -  80 //максимальный размер одной строки
         // N  -  10 //максимальное количество строк в массиве
 
+        const char STOP_STRING[] = "*";
+        const int M = 80;
+        const int N = 5;
+
         /** 
          * Объявите двухмерный массив с именем cBuffer типа char и размерностью
          * N*M.
          */
+
+        char cBuffer[N][M];
 
         /**
          * Объявите массив (с именем cPointers) указателей на строки
          * размерностью N.
          */
 
+        char* cPointers[N];
 
         /** 
          * Цикл ввода строк:
@@ -271,19 +390,32 @@ int main()
          * 2. пока не введена строка STOP_STRING или не заполнен весь массив; 
          */
 
+        int nIndex = 0;
+        while (nIndex < N)
         {
+            cout << "Задание 4. Введите слово (* — конец ввода): ";
             /** ввод строки в массив cBuffer: */
-                                    
+            cin.width(M);
+            if (!(cin >> cBuffer[nIndex])) {
+                break;
+            }
+
             /** если введена строка - признак окончания, то выйти из цикла */
+            if (cBuffer[nIndex][0] == STOP_STRING[0] && cBuffer[nIndex][1] == '\0') {
+                break;
+            }
 
             /** Присвойте элементу массива cPointers с индексом nIndex */
 
             /** указатель на строку с номером nIndex в массиве cBuffer */
+            cPointers[nIndex] = cBuffer[nIndex];
+            nIndex++;
 
         }
 
 
         /** Выдать диагностику о том, что прием строк завершен.*/
+        cout << "Прием строк завершен.\n";
 
         /**
          * Теперь сортируем строки.
@@ -294,9 +426,30 @@ int main()
          * На каждой итерации - промежуточная печать отсортированных строк.
          */
 
+        for (int i = 0; i < nIndex - 1; i++) {
+            for (int j = 0; j < nIndex - i - 1; j++) {
+                int k = 0;
+                while (cPointers[j][k] != '\0' && cPointers[j][k] == cPointers[j + 1][k]) {
+                    k++;
+                }
+                if ((unsigned char)cPointers[j][k] > (unsigned char)cPointers[j + 1][k]) {
+                    char* temp = cPointers[j];
+                    cPointers[j] = cPointers[j + 1];
+                    cPointers[j + 1] = temp;
+                }
+            }
+            cout << "После прохода " << i + 1 << ":\n";
+            for (int j = 0; j < nIndex; j++) {
+                cout << cPointers[j] << '\n';
+            }
+        }
+        cout << "Отсортированные строки:\n";
+        for (int i = 0; i < nIndex; i++) {
+            cout << cPointers[i] << '\n';
+        }
+
     }
 
-/*
     /**
      * Задание 5. Динамические строки.
      *
@@ -315,15 +468,80 @@ int main()
 
     {
         int nStringNumber;
+        cout << "Задание 5. Введите количество строк: ";
+        if (!(cin >> nStringNumber) || nStringNumber < 0) {
+            return 0;
+        }
+        char symbol;
+        while (cin.get(symbol) && symbol != '\n') {
+        }
+        char** cPointers = new char*[nStringNumber];
+        int count = 0;
 
         /** Цикл ввода строк: */
+        while (count < nStringNumber) {
+            cout << "Введите строку (* — конец ввода): ";
+            int capacity = 1;
+            int length = 0;
+            char* buffer = new char[capacity];
+            while (cin.get(symbol) && symbol != '\n') {
+                if (length + 1 == capacity) {
+                    capacity *= 2;
+                    char* temp = new char[capacity];
+                    for (int i = 0; i < length; i++) {
+                        temp[i] = buffer[i];
+                    }
+                    delete[] buffer;
+                    buffer = temp;
+                }
+                buffer[length] = symbol;
+                length++;
+            }
+            buffer[length] = '\0';
+            if ((!cin && length == 0) || (length == 1 && buffer[0] == '*')) {
+                delete[] buffer;
+                break;
+            }
+            cPointers[count] = new char[length + 1];
+            for (int i = 0; i <= length; i++) {
+                cPointers[count][i] = buffer[i];
+            }
+            delete[] buffer;
+            count++;
+        }
+        cout << "Прием строк завершен.\n";
 
         /** 
          * Цикл сортировки строк по методу "всплывающего пузырька" в порядке
          * возрастания кода первого символа.
          */
+        for (int i = 0; i < count - 1; i++) {
+            for (int j = 0; j < count - i - 1; j++) {
+                int k = 0;
+                while (cPointers[j][k] != '\0' && cPointers[j][k] == cPointers[j + 1][k]) {
+                    k++;
+                }
+                if ((unsigned char)cPointers[j][k] > (unsigned char)cPointers[j + 1][k]) {
+                    char* temp = cPointers[j];
+                    cPointers[j] = cPointers[j + 1];
+                    cPointers[j + 1] = temp;
+                }
+            }
+            cout << "После прохода " << i + 1 << ":\n";
+            for (int j = 0; j < count; j++) {
+                cout << cPointers[j] << '\n';
+            }
+        }
+        cout << "Отсортированные строки:\n";
+        for (int i = 0; i < count; i++) {
+            cout << cPointers[i] << '\n';
+        }
 
         /** Освобождение занятой памяти */
+        for (int i = 0; i < count; i++) {
+            delete[] cPointers[i];
+        }
+        delete[] cPointers;
 
     }
 
@@ -359,6 +577,71 @@ int main()
      */
   
 
+    {
+        cout << "Задание 6. Введите строку:\n";
+        int capacity = 1;
+        int length = 0;
+        char* text = new char[capacity];
+        char symbol;
+        while (cin.get(symbol) && symbol != '\n') {
+            if (length + 1 == capacity) {
+                capacity *= 2;
+                char* temp = new char[capacity];
+                for (int i = 0; i < length; i++) {
+                    temp[i] = text[i];
+                }
+                delete[] text;
+                text = temp;
+            }
+            if (symbol == '\t') {
+                symbol = ' ';
+            }
+            text[length] = symbol;
+            length++;
+        }
+        text[length] = '\0';
+
+        const int WIDTH = 40;
+        cout << "+------------------------------------------+\n";
+        int start = 0;
+        do {
+            int end = start + WIDTH;
+            if (end > length) {
+                end = length;
+            }
+            if (end < length && text[end] != ' ') {
+                int space = end;
+                while (space > start && text[space] != ' ') {
+                    space--;
+                }
+                if (space > start) {
+                    end = space;
+                }
+            }
+            cout << "| ";
+            for (int i = start; i < end; i++) {
+                cout << text[i];
+            }
+            for (int i = end - start; i < WIDTH; i++) {
+                cout << ' ';
+            }
+            cout << " |\n";
+            start = end;
+            while (start < length && text[start] == ' ') {
+                start++;
+            }
+        } while (start < length);
+        cout << "+------------------------------------------+\n"
+                "    \\\n"
+                "     \\\n"
+                "       /\\_/\\  (\n"
+                "      ( ^.^ ) _)\n"
+                "        \\\"/  (\n"
+                "      ( | | )\n"
+                "     (__d b__)\n";
+        delete[] text;
+    }
+
     /** 
      * Задание 7. Сложные указатели.
      *
@@ -393,8 +676,15 @@ int main()
      */
 
     {
+        double dArray[4][3][3] = {
+            {{1, 1, 1}, {1, 1, 1}, {1, 1, 1}},
+            {{2, 2, 2}, {2, 2, 2}, {2, 2, 2}},
+            {{3, 3, 3}, {3, 3, 3}, {3, 3, 3}},
+            {{4, 4, 4}, {4, 4, 4}, {4, 4, 4}}
+        };
 
         // for(int i=0; i<...; ...)
+        for (int i = 0; i < 4; i += 2)
         {
 
             /** 
@@ -403,10 +693,18 @@ int main()
              */
 
             // ... =  dArray[i];
+            double (*first)[3] = dArray[i];
             // ... =  dArray[i+1];
+            double (*second)[3] = dArray[i+1];
 
             /** переставляем местами элементы i-того и i+1-ого слоев */
-
+            for (int j = 0; j < 3; j++) {
+                for (int k = 0; k < 3; k++) {
+                    double temp = first[j][k];
+                    first[j][k] = second[j][k];
+                    second[j][k] = temp;
+                }
+            }
 
         }
     }
@@ -436,6 +734,27 @@ int main()
      */
     
     {
+        const int N = 5, M = 10;
+        char array[N][M];
+        for (int i = 0; i < N; i++) {
+            for (int j = 0; j < M; j++) {
+                array[i][j] = rand() % 2 == 0 ? '*' : '_';
+            }
+        }
+        cout << "Задание 7.1:\n";
+        for (int i = 0; i < N; i++) {
+            int stars = 0;
+            for (int j = 0; j < M; j++) {
+                if (array[i][j] == '*') {
+                    stars++;
+                }
+            }
+            for (int j = 0; j < M; j++) {
+                array[i][j] = j < stars ? '*' : '_';
+                cout << array[i][j] << ' ';
+            }
+            cout << '\n';
+        }
 
     }
 
@@ -448,6 +767,31 @@ int main()
      */
 
     {
+        const int N = 5, M = 10;
+        char array[N][M];
+        for (int i = 0; i < N; i++) {
+            for (int j = 0; j < M; j++) {
+                array[i][j] = rand() % 2 == 0 ? '*' : '_';
+            }
+        }
+        for (int j = 0; j < M; j++) {
+            int stars = 0;
+            for (int i = 0; i < N; i++) {
+                if (array[i][j] == '*') {
+                    stars++;
+                }
+            }
+            for (int i = 0; i < N; i++) {
+                array[i][j] = i >= N - stars ? '*' : '_';
+            }
+        }
+        cout << "Задание 7.2:\n";
+        for (int i = 0; i < N; i++) {
+            for (int j = 0; j < M; j++) {
+                cout << array[i][j] << ' ';
+            }
+            cout << '\n';
+        }
 
     }
 
