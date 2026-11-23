@@ -1,0 +1,24 @@
+{
+    "Books": {
+        "Data": {
+            "1": {
+                "Author": "Alexandre Dumas",
+                "Description": "An exciting historical adventure novel about a young man named d'Artagnan who travels to Paris in search of glory and adventure. Together with three brave musketeers, he becomes involved in dangerous royal intrigues, where friendship, honor, and loyalty are put to the test.",
+                "Genre": "Historical Fiction",
+                "Name": "The Three Musketeers",
+                "Year": "1844"
+            },
+            "2": {
+                "Author": "J. R. R. Tolkien",
+                "Description": "An epic fantasy adventure about a young hobbit named Frodo Baggins who must embark on a dangerous journey to destroy the powerful One Ring. Along the way, he meets loyal companions, faces terrifying enemies, and discovers the true meaning of courage, friendship, and sacrifice.",
+                "Genre": "Fantasy",
+                "Name": "The Lord of the Rings",
+                "Year": "1954"
+            }
+        }
+    },
+    "Settings": {
+        "Direction": "None",
+        "SortingType": "None"
+    }
+}

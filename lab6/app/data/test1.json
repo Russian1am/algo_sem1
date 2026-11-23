@@ -1,0 +1,18 @@
+{
+    "Books": {
+        "1": {
+            "Author": "George Orwell",
+            "Description": "A dystopian novel set in a world where the government controls every aspect of people's lives. Winston Smith begins to question the system and secretly rebels against the oppressive regime. A powerful story about freedom, truth, surveillance, and the dangers of totalitarianism.",
+            "Genre": "Dystopian Fiction",
+            "Name": "1984",
+            "Year": "1949"
+        },
+        "2": {
+            "Author": "Arthur Conan Doyle",
+            "Description": "A mysterious detective story about the brilliant Sherlock Holmes and his loyal friend Dr. Watson. Together, they investigate the strange legend of a terrifying supernatural hound that haunts an ancient English family. Using logic and observation, Holmes must uncover the truth behind the mysterious events.",
+            "Genre": "Detective Fiction",
+            "Name": "The Hound of the Baskervilles",
+            "Year": "1902"
+        }
+    }
+}

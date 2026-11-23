@@ -2,14 +2,17 @@
  * Практическое занятие №5. "Старые" потоковые функции стандартной библиотеки.
  * Указатели на функции. Структуры.
  */
-
+ 
 #include <iostream>
+#include <cstdio>
+#include "matrix.h"
 //#include <cstdio>
 #include "other.h"
 
 
-int main()
-{
+Book global_book;
+
+int main(){
     /**
      * Задание 1. "Старые" потоковые функции стандартной библиотеки.
      *
@@ -22,6 +25,11 @@ int main()
      *
      * С помощью функции scanf сформирйуте три коэффициента: A,B,C.
      */
+    {
+        double A, B, C;
+        if (!read_number("A: ", A) || !read_number("B: ", B) || !read_number("C: ", C)){
+            return 0;
+        }
 
     /**
      * Задание 1.2.
@@ -29,6 +37,14 @@ int main()
      * Выведите (красиво!) таблицу значений y=A*x*x + B*x + C при изменении x в
      * диапазоне -2 до +2 с шагом 0.5
      */
+        {
+            std::printf("       x |            y\n");
+            for (int i = -4; i <= 4; ++i){
+                double x = i * 0.5;
+                std::printf("%8.1f | %12.4f\n", x, A * x * x + B * x + C);
+            }
+        }
+    }
 
     /**
      * Задание 2. Указатели на функции.
@@ -59,6 +75,70 @@ int main()
      *   по указателю.
      * - предусмотрите возможность ввода непредусмотренного знака операции.
      */
+    {
+        while (true){
+            std::printf("Операция (+ - * / ^), 0 — закончить: ");
+            char operation;
+            if (std::scanf(" %c", &operation) != 1){
+                return 0;
+            }
+            bool extra = !finish_line();
+            if (extra){
+                std::printf("Неверная операция.\n");
+                continue;
+            }
+            if (operation == '0'){
+                break;
+            }
+            double (*function)(double, double) = 0;
+            switch (operation){
+                case '+': {
+                    function = add;
+                    break;
+                }
+                case '-': {
+                    function = sub;
+                    break;
+                }
+                case '*': {
+                    function = mul;
+                    break;
+                }
+                case '/': {
+                    function = div;
+                    break;
+                }
+                case '^': {
+                    function = power;
+                    break;
+                }
+                default: {
+                    std::printf("Неверная операция.\n");
+                    continue;
+                }
+            }
+            double a, b;
+            if (!read_number("Первое число: ", a) ||
+                !read_number("Второе число: ", b)){
+                return 0;
+            }
+            if (operation == '/' && b == 0){
+                std::printf("Деление на ноль.\n");
+                continue;
+            }
+            if (operation == '^' &&
+                ((a == 0 && b <= 0) || (a < 0 && (b < -2147483647.0 || b > 2147483647.0 || b != (int)b)))){
+                std::printf("Недопустимые аргументы степени.\n");
+                continue;
+            }
+            double result = function(a, b);
+            if (result - result != 0){
+                std::printf("Результат вне диапазона double.\n");
+            } else{
+                std::printf("Результат: %.10g\n", result);
+            }
+        }
+    }
 
     /**
      * Задание 2.2. Указатель на функцию в качестве аргумента.
@@ -89,14 +169,19 @@ int main()
      */
     {
         // int nAr[]=...   //массив для сортировки
+        int nAr[] = {4, -2, 7, 1, 0};
         // int nTotal=...          //количество элементов в массиве 
+        int nTotal = sizeof(nAr) / sizeof(nAr[0]); 
 
         /** Печать исходного массива */
+        print_array(nAr, nTotal);
 
         // sort(reinterpret_cast<char*>(&nAr[0]), nTotal, sizeof(int), 
         //      SwapInt, CmpInt);
+        sort((char*)nAr, nTotal, sizeof(int), swap_int, cmp_int);
 
         /** Печать результатов сортировки */
+        print_array(nAr, nTotal);
     }
 
     /**
@@ -105,6 +190,18 @@ int main()
      * По аналогии с заданием 2.2.1 напишите функцию swap_double и cmp_double,
      * и вызовите функцию sort для сортировки вещественных значений.
      */
+    {
+        double a[] = {2.5, -1.2, 0.0, 4.1};
+        for (int i = 0; i < 4; ++i){
+            std::cout << a[i] << " ";
+        }
+        std::cout << "\n";
+        sort((char*)a, 4, sizeof(double), swap_double, cmp_double);
+        for (int i = 0; i < 4; ++i){
+            std::cout << a[i] << " ";
+        }
+        std::cout << "\n";
+    }
 
     /**
      * Задание 2.2.3.
@@ -116,6 +213,15 @@ int main()
 
     {
         const char* arStr[] = {"QQQ", "SDF", "ABC"};
+        for (int i = 0; i < 3; ++i){
+            std::cout << arStr[i] << " ";
+        }
+        std::cout << "\n";
+        sort((char*)arStr, 3, sizeof(const char*), swap_str, cmp_str);
+        for (int i = 0; i < 3; ++i){
+            std::cout << arStr[i] << " ";
+        }
+        std::cout << "\n";
     }
 
     /**
@@ -136,6 +242,19 @@ int main()
      * функций (из второго массива), примите от пользователя номер функции,
      * после чего вызовите функцию для какого-нибудь массива.
      */
+    {
+        int a[] = {4, -2, 7, 1, 0};
+        void (*functions[4])(int*, int) = {print_max, print_min, sort_asc, sort_desc};
+        const char *names[4] = {"Максимум", "Минимум", "По возрастанию", "По убыванию"};
+        for (int i = 0; i < 4; ++i){
+            std::printf("%d. %s\n", i + 1, names[i]);
+        }
+        int choice;
+        if (!read_integer("Номер функции: ", 1, 4, choice)){
+            return 0;
+        }
+        functions[choice - 1](a, 5);
+    }
 
     /**
      * Задание 2.4. Метод прямоугольников.
@@ -153,8 +272,15 @@ int main()
      * Проверьте функцию на разных вещественных функциях (линейных, параболах,
      * exp, sin) и сравните полученные результаты с теоретическими.
      */
+    {
+        std::printf("Функция | Интеграл | Теоретически\n");
+        std::printf("2x+1 [0,1]: %.10f | %.10f\n", integrate(linear, 0, 1, 10000), 2.0);
+        std::printf("x*x [0,1]: %.10f | %.10f\n", integrate(square, 0, 1, 10000), 1.0 / 3);
+        std::printf("exp [0,1]: %.10f | %.10f\n", integrate(my_exp, 0, 1, 10000), 1.718281828459045);
+        std::printf("sin [0,pi]: %.10f | %.10f\n", integrate(my_sin, 0, 3.141592653589793, 10000), 2.0);
+    }
 
-    /**
+    /** 
      * Задание 3. Структуры С.
      */
 
@@ -185,6 +311,12 @@ int main()
      *
      * Подумайте: от чего зависит объем выделяемой памяти?
      */
+    {
+        Book local_book;
+        static Book static_book;
+        Book *dynamic_book = new Book;
+        std::cout << sizeof(global_book) << " " << sizeof(local_book) << " "
+                  << sizeof(static_book) << " " << sizeof(*dynamic_book) << "\n";
 
     /**
      * Задание 3.1.3. 
@@ -194,6 +326,12 @@ int main()
      * Замечание: если для хранения строки используется массив, необходимо
      * предусмотреть "защиту" от выхода за границы массива.
      */
+        {
+            set_book(global_book, "Pushkin", "Eugene Onegin", 1833, 350, 1);
+            set_book(local_book, "Tolstoy", "War and Peace", 1869, 700, 1);
+            set_book(static_book, "Feynman", "Lectures on Physics", 1963, 900, 2);
+            set_book(*dynamic_book, "Stroustrup", "The C++ Programming Language", 2013, 1200, 3);
+        }
 
     /**
      * Задание 3.1.4. 
@@ -204,6 +342,14 @@ int main()
      *
      * Для вывода на консоль используйте функцию стандартной библиотеки printf.
      */
+        {
+            print_book(global_book);
+            print_book(local_book);
+            print_book(static_book);
+            print_book(*dynamic_book);
+        }
+        delete dynamic_book;
+    }
 
     /**
      * Задание 3.1.5.
@@ -219,6 +365,13 @@ int main()
      * Кроме этого необходимо проверить и ошибки другого рода: программа
      * ожидает число, а пользователь ввел случайно букву.
      */
+    {
+        Book book;
+        if (!read_book(book)){
+            return 0;
+        }
+        print_book(book);
+    }
 
     /**
      * Задание 3.2. Матричные операции.
@@ -233,6 +386,13 @@ int main()
      * Это определение и связанные с ними функции определите в отдельной паре
      * файлов: matrix.h и matrix.cpp.
      */
+    {
+        Matrix a = init_foo(3);
+        a = {0, 0, 0};
+        m_zero(&a, 2, 3);
+        std::cout << m_height(&a) << " " << m_width(&a) << "\n";
+        m_free(&a);
+    }
 
     /**
      * Задание 3.2.2.
@@ -252,6 +412,21 @@ int main()
      * - void m_set(Matrix *A, int i, int j, double value) - установка i,j-того
      *   элемента матрицы.
      */
+    {
+        Matrix a = init_foo(3);
+        Matrix b = init_foo(3);
+        a = {0, 0, 0};
+        b = {0, 0, 0};
+        m_zero(&a, 2, 3);
+        m_set(&a, 1, 2, 5);
+        std::cout << m_get(&a, 1, 2) << " " << m_width(&a) << " " << m_height(&a) << "\n";
+        m_copy(&a, &b);
+        std::cout << m_get(&b, 1, 2) << "\n";
+        m_id(&a, 2);
+        std::cout << m_get(&a, 0, 0) << " " << m_get(&a, 0, 1) << "\n";
+        m_free(&a);
+        m_free(&b);
+    }
 
     /**
      * Задание 3.2.3.
@@ -267,6 +442,19 @@ int main()
      *   матрицу A на матрицу B и сохраняет результат в dst. Если размеры
      *   матрицы не позволяют умножить матрицы, функция возвращает 1, иначе 0.
      */
+    {
+        Matrix a = {0, 0, 0}, b = {0, 0, 0}, result = {0, 0, 0};
+        m_id(&a, 2);
+        m_id(&b, 2);
+        std::cout << m_add(&a, &b) << " " << m_get(&a, 0, 0) << "\n";
+        m_neg(&a);
+        std::cout << m_mult(&a, &b, &result) << " " << m_get(&result, 0, 0) << "\n";
+        m_zero(&b, 3, 1);
+        std::cout << m_add(&a, &b) << " " << m_mult(&a, &b, &result) << "\n";
+        m_free(&a);
+        m_free(&b);
+        m_free(&result);
+    }
 
     /**
      * Задание 3.2.4.
@@ -281,6 +469,25 @@ int main()
      * Фибоначчи: 1 и 0. Выполняйте эту формулу итеративно и выведите первые 40
      * чисел Фибоначчи.
      */
+    {
+        Matrix a = init_foo(3);
+        Matrix vector = init_foo(3);
+        a = {0, 0, 0}; 
+        vector = {0, 0, 0};
+        m_zero(&a, 2, 2);
+        m_set(&a, 0, 0, 1);
+        m_set(&a, 0, 1, 1);
+        m_set(&a, 1, 0, 1);
+        m_zero(&vector, 2, 1);
+        m_set(&vector, 0, 0, 1);
+        for (int i = 0; i < 40; ++i){
+            std::printf("%.0f ", m_get(&vector, 0, 0));
+            m_mult(&a, &vector, &vector);
+        }
+        std::printf("\n");
+        m_free(&a);
+        m_free(&vector);
+    }
 
     return 0;
 }
